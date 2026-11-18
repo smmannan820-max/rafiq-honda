@@ -80,7 +80,13 @@ hr{border:0;border-top:1px solid var(--line);margin:14px 0}.empty{text-align:cen
 
 <section id="stock" class="page hidden"><div class="card"><h2>বাইক স্টক</h2><form id="stockForm"><div class="row"><div><label>বাইকের মডেল *</label><input id="stockModel" required></div><div><label>রং</label><input id="stockColor"></div></div><div class="row"><div><label>ইঞ্জিন নম্বর</label><input id="stockEngine"></div><div><label>চেসিস নম্বর</label><input id="stockChassis"></div></div><div class="row"><div><label>পরিমাণ</label><input id="stockQty" type="number" min="1" value="1"></div><div><label>ক্রয়মূল্য (প্রতি বাইক)</label><input id="stockCost" type="number" min="0"></div></div><button class="primary" type="submit" style="margin-top:12px">স্টক যোগ করুন</button></form><hr><div class="tablewrap"><table><thead><tr><th>মডেল</th><th>রং</th><th>ইঞ্জিন</th><th>চেসিস</th><th>পরিমাণ</th><th>অ্যাকশন</th></tr></thead><tbody id="stockRows"></tbody></table></div><p id="stockEmpty" class="empty">স্টকের তথ্য যোগ করা হয়নি।</p></div></section>
 
-<section id="reports" class="page hidden"><div class="card"><h2>বিক্রি ও আদায়ের রিপোর্ট</h2><div class="row"><div><label>শুরুর তারিখ</label><input id="reportFrom" type="date"></div><div><label>শেষ তারিখ</label><input id="reportTo" type="date"></div></div><button class="primary" id="runReport" style="margin-top:12px">রিপোর্ট দেখুন</button><div id="reportResult" class="result"></div><button id="exportCsv" class="success" style="margin-top:10px">বিক্রির CSV ডাউনলোড</button></div></section>
+<section id="reports" class="page hidden"><div class="card"><h2>বিক্রি ও আদায়ের রিপোর্ট</h2><div class="row"><div><label>শুরুর তারিখ</label><input id="reportFrom" type="date"></div><div><label>শেষ তারিখ</label><input id="reportTo" type="date"></div></div><button class="primary" id="runReport" style="margin-top:12px">রিপোর্ট দেখুন</button><div id="reportResult" class="result"></div>
+<div id="employeeCollectionBlock" style="margin-top:16px">
+<h3>কর্মচারী অনুযায়ী কালেকশন</h3><p class="muted">উপরের তারিখের মধ্যে কে কত টাকা আদায় করেছেন তার হিসাব।</p>
+<div class="tablewrap"><table style="min-width:420px"><thead><tr><th>কর্মচারী</th><th>কালেকশনের সংখ্যা</th><th>মোট কালেকশন</th></tr></thead><tbody id="employeeCollectionRows"></tbody></table></div>
+<p id="employeeCollectionEmpty" class="empty">রিপোর্ট দেখতে তারিখ নির্বাচন করে রিপোর্ট দেখুন চাপুন।</p>
+</div>
+<button id="exportCsv" class="success" style="margin-top:10px">বিক্রির CSV ডাউনলোড</button></div></section>
 
 <section id="settings" class="page hidden"><div class="card"><h2>কর্মচারীর নাম</h2><p class="muted">এখানে নাম যোগ করলে বিক্রি ও কালেকশনের ফর্মে পাওয়া যাবে। এটি এখন শুধু এই ব্রাউজারে সংরক্ষিত।</p><form id="staffForm"><label>কর্মচারীর নাম</label><input id="staffName" required placeholder="নাম লিখুন"><button class="primary" style="margin-top:10px">নাম যোগ করুন</button></form><div id="staffList" style="margin-top:12px"></div><hr><h3>ডেটা ব্যাকআপ</h3><p class="muted">এই ডিভাইসের তথ্য JSON ফাইলে ডাউনলোড করুন। এটি Firebase Sync-এর বিকল্প নয়।</p><div class="actions"><button id="backup" class="success">ব্যাকআপ ডাউনলোড</button><button id="restoreBtn">ব্যাকআপ ইমপোর্ট</button><input id="restoreFile" type="file" accept="application/json" class="hidden"></div><hr><button id="clearData" class="danger">সব ডেমো তথ্য মুছুন</button></div></section>
 </main>
@@ -96,7 +102,7 @@ function dueFor(s){return Math.max(0,s.price-paidFor(s.id))}
 function esc(v){return String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
 function page(id){document.querySelectorAll('.page').forEach(p=>p.classList.add('hidden'));$(id).classList.remove('hidden');document.querySelectorAll('#nav button').forEach(b=>b.classList.toggle('active',b.dataset.page===id));render()}
 document.querySelectorAll('#nav button').forEach(b=>b.onclick=()=>page(b.dataset.page));
-function refreshStaff(){document.querySelectorAll('.staffSelect').forEach(sel=>{let old=sel.value;sel.innerHTML=db.staff.map(n=>`<option>${esc(n)}</option>`).join('');if(db.staff.includes(old))sel.value=old});$('staffList').innerHTML=db.staff.map((n,i)=>`<div class="actions" style="margin:6px 0"><span class="pill">${esc(n)}</span>${i>0?`<button class="danger" onclick="removeStaff(${i})">মুছুন</button>`:''}</div>`).join('')}
+function refreshStaff(){document.querySelectorAll('.staffSelect').forEach(sel=>{let old=sel.value;if(window.__currentRole==='staff'){sel.innerHTML=`<option>${esc(window.__currentUserName||'Staff')}</option>`;sel.value=window.__currentUserName||'Staff';sel.disabled=true}else{sel.innerHTML=db.staff.map(n=>`<option>${esc(n)}</option>`).join('');if(db.staff.includes(old))sel.value=old;sel.disabled=false}});$('staffList').innerHTML=db.staff.map((n,i)=>`<div class="actions" style="margin:6px 0"><span class="pill">${esc(n)}</span>${i>0?`<button class="danger" onclick="removeStaff(${i})">মুছুন</button>`:''}</div>`).join('')}
 function render(){
  const total=db.sales.reduce((a,s)=>a+s.price,0),paid=db.payments.reduce((a,p)=>a+p.amount,0),due=db.sales.reduce((a,s)=>a+dueFor(s),0);
  $('mSales').textContent=money(total);$('mCount').textContent=db.sales.length;$('mPaid').textContent=money(paid);$('mDue').textContent=money(due);
@@ -118,7 +124,7 @@ let s={id:uid(),name:$('customer').value.trim(),phone:$('phone').value.trim(),ad
 db.sales.push(s);if(down>0)db.payments.push({id:uid(),saleId:s.id,amount:down,date:s.saleDate,collector:s.salesperson,method:'নগদ',note:'ডাউন পেমেন্ট'});save();e.target.reset();$('price').value=120000;$('down').value=30000;$('months').value=12;$('saleDate').value=today();$('firstDate').value=today();render();alert('বিক্রির তথ্য সংরক্ষণ হয়েছে।')}
 function updatePaymentInfo(){let s=db.sales.find(x=>x.id===$('paymentSale').value);$('paymentInfo').textContent=s?'বিক্রয়মূল্য: '+money(s.price)+' · মোট আদায়: '+money(paidFor(s.id))+' · বর্তমান বকেয়া: '+money(dueFor(s)):'বিক্রি নির্বাচন করলে বকেয়া দেখা যাবে।';$('payAmount').max=s?dueFor(s):''}
 $('paymentSale').onchange=updatePaymentInfo;
-$('paymentForm').onsubmit=e=>{e.preventDefault();let s=db.sales.find(x=>x.id===$('paymentSale').value),amount=+$('payAmount').value;if(!s||amount<=0||amount>dueFor(s)){alert('বিক্রি নির্বাচন করুন এবং বকেয়ার বেশি টাকা দেবেন না।');return}db.payments.push({id:uid(),saleId:s.id,amount,date:$('payDate').value,collector:$('collector').value,method:$('payMethod').value,note:$('payNote').value.trim()});save();e.target.reset();$('payDate').value=today();render();alert('কালেকশন সংরক্ষণ হয়েছে।')}
+$('paymentForm').onsubmit=e=>{e.preventDefault();let s=db.sales.find(x=>x.id===$('paymentSale').value),amount=+$('payAmount').value;if(!s||amount<=0||amount>dueFor(s)){alert('বিক্রি নির্বাচন করুন এবং বকেয়ার বেশি টাকা দেবেন না।');return}db.payments.push({id:uid(),saleId:s.id,amount,date:$('payDate').value,collector:window.__currentRole==='staff'?(window.__currentUserName||'Staff'):$('collector').value,method:$('payMethod').value,note:$('payNote').value.trim()});save();e.target.reset();$('payDate').value=today();render();alert('কালেকশন সংরক্ষণ হয়েছে।')}
 function selectForPayment(id){page('collection');$('paymentSale').value=id;updatePaymentInfo();$('payAmount').focus()}
 function deleteSale(id){if(currentRole!=="manager"){alert("শুধু Manager বিক্রি মুছতে পারবেন।");return}if(!confirm('এই বিক্রি এবং এর সংশ্লিষ্ট পেমেন্ট মুছবেন?'))return;db.sales=db.sales.filter(s=>s.id!==id);db.payments=db.payments.filter(p=>p.saleId!==id);save();render()}
 $('customerSearch').oninput=render;
@@ -126,7 +132,7 @@ $('stockForm').onsubmit=e=>{e.preventDefault();db.stock.push({id:uid(),model:$('
 function deleteStock(id){if(currentRole!=="manager"){alert("শুধু Manager স্টক মুছতে পারবেন।");return}if(confirm('স্টকের এই তথ্য মুছবেন?')){db.stock=db.stock.filter(x=>x.id!==id);save();render()}}
 $('staffForm').onsubmit=e=>{e.preventDefault();let n=$('staffName').value.trim();if(n&&!db.staff.includes(n)){db.staff.push(n);save();$('staffName').value='';render()}}
 function removeStaff(i){if(confirm('কর্মচারীর নাম মুছবেন?')){db.staff.splice(i,1);if(!db.staff.length)db.staff=['Manager'];save();render()}}
-$('runReport').onclick=()=>{let a=$('reportFrom').value,b=$('reportTo').value,sales=db.sales.filter(s=>(!a||s.saleDate>=a)&&(!b||s.saleDate<=b)),ids=new Set(sales.map(s=>s.id)),payments=db.payments.filter(p=>ids.has(p.saleId)&&(!a||p.date>=a)&&(!b||p.date<=b));$('reportResult').innerHTML='বিক্রির সংখ্যা: <b>'+sales.length+'</b><br>বিক্রয়মূল্য: <b>'+money(sales.reduce((n,s)=>n+s.price,0))+'</b><br>নির্বাচিত সময়ে আদায়: <b>'+money(payments.reduce((n,p)=>n+p.amount,0))+'</b><br>এই বিক্রিগুলোর বর্তমান বকেয়া: <b>'+money(sales.reduce((n,s)=>n+dueFor(s),0))+'</b>'}
+$('runReport').onclick=()=>{let a=$('reportFrom').value,b=$('reportTo').value,sales=db.sales.filter(s=>(!a||s.saleDate>=a)&&(!b||s.saleDate<=b)),ids=new Set(sales.map(s=>s.id)),payments=db.payments.filter(p=>(!a||p.date>=a)&&(!b||p.date<=b)),salesPayments=payments.filter(p=>ids.has(p.saleId));$('reportResult').innerHTML='বিক্রির সংখ্যা: <b>'+sales.length+'</b><br>বিক্রয়মূল্য: <b>'+money(sales.reduce((n,s)=>n+s.price,0))+'</b><br>নির্বাচিত সময়ে আদায়: <b>'+money(salesPayments.reduce((n,p)=>n+p.amount,0))+'</b><br>এই বিক্রিগুলোর বর্তমান বকেয়া: <b>'+money(sales.reduce((n,s)=>n+dueFor(s),0))+'</b>';let grouped={};payments.forEach(p=>{let name=p.collector||'নাম নেই';if(!grouped[name])grouped[name]={count:0,total:0};grouped[name].count++;grouped[name].total+=Number(p.amount)||0});let entries=Object.entries(grouped).sort((x,y)=>y[1].total-x[1].total);$('employeeCollectionRows').innerHTML=entries.map(([name,v])=>'<tr><td>'+esc(name)+'</td><td>'+v.count+'</td><td class="paid">'+money(v.total)+'</td></tr>').join('');$('employeeCollectionEmpty').style.display=entries.length?'none':'block';$('employeeCollectionEmpty').textContent=entries.length?'':'এই তারিখে কোনো কালেকশন নেই।'}
 $('exportCsv').onclick=()=>{let lines=[['নাম','মোবাইল','ঠিকানা','মডেল','তারিখ','বিক্রয়মূল্য','আদায়','বকেয়া','দায়িত্বপ্রাপ্ত'],...db.sales.map(s=>[s.name,s.phone,s.address,s.model,s.saleDate,s.price,paidFor(s.id),dueFor(s),s.salesperson])];let csv='\uFEFF'+lines.map(r=>r.map(v=>'"'+String(v??'').replace(/"/g,'""')+'"').join(',')).join('\n');download('rafiq-honda-sales.csv',csv,'text/csv;charset=utf-8')}
 function download(name,data,type){let blob=new Blob([data],{type}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download=name;a.click();URL.revokeObjectURL(url)}
 $('backup').onclick=()=>download('rafiq-honda-backup.json',JSON.stringify(db,null,2),'application/json');
@@ -166,6 +172,7 @@ let ready = false;
 let saving = false;
 let pendingData = null;
 let currentRole = "";
+let currentUserName = "";
 
 function showMessage(text, isError=false) {
   msg.textContent = text;
@@ -213,11 +220,20 @@ onAuthStateChanged(auth, async user => {
       return;
     }
     currentRole = profileSnap.data().role;
+    currentUserName = currentRole === "manager" ? "Manager" : (profileSnap.data().name || user.email || "Staff");
+    window.__currentRole = currentRole;
+    window.__currentUserName = currentUserName;
     const cloudSnap = await getDoc(dataRef);
     if (cloudSnap.exists() && cloudSnap.data().payload) {
       window.__setRafiqData(cloudSnap.data().payload);
     } else {
       await setDoc(dataRef, { payload: window.__getRafiqData(), updatedAt: serverTimestamp() });
+    }
+    if (!Array.isArray(window.__getRafiqData().staff)) window.__getRafiqData().staff = [];
+    if (!window.__getRafiqData().staff.includes(currentUserName)) {
+      const updated = window.__getRafiqData();
+      updated.staff.push(currentUserName);
+      window.__setRafiqData(updated);
     }
     ready = true;
     window.__queueRafiqCloudSave = async data => {
@@ -249,6 +265,12 @@ onAuthStateChanged(auth, async user => {
       showMessage("অনলাইন Sync-এ সমস্যা হয়েছে: " + error.message, true);
     });
     showApp();
+    if (currentRole === "staff") {
+      document.getElementById("employeeCollectionBlock").style.display = "none";
+    } else {
+      document.getElementById("employeeCollectionBlock").style.display = "";
+    }
+    window.__queueRafiqCloudSave(window.__getRafiqData());
     document.querySelector('#nav button[data-page="settings"]').style.display = currentRole === "manager" ? "" : "none";
     document.getElementById("clearData").style.display = currentRole === "manager" ? "" : "none";
     document.getElementById("backup").style.display = currentRole === "manager" ? "" : "none";
