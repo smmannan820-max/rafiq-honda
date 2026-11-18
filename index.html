@@ -119,7 +119,7 @@ function printReceipt(type,s,payment=null,previousPaid=0){
 
 async function sendCustomerSms(phone,message,successText){
  try{
-  if(!/^01[3-9]\\d{8}$/.test(String(phone||'')))throw new Error('কাস্টমারের ১১ সংখ্যার বাংলাদেশি মোবাইল নম্বর সঠিক নয়');
+  if(!/^01[3-9]\d{8}$/.test(String(phone||'')))throw new Error('কাস্টমারের ১১ সংখ্যার বাংলাদেশি মোবাইল নম্বর সঠিক নয়');
   if(typeof window.__sendRafiqSms!=='function')throw new Error('SMS সার্ভার সংযোগ পাওয়া যায়নি');
   const result=await window.__sendRafiqSms(phone,message);
   alert(successText||result.response||'SMS পাঠানো হয়েছে。');return true;
