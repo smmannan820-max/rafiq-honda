@@ -1,67 +1,133 @@
 <!doctype html>
 <html lang="bn">
 <head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="theme-color" content="#142b45"><title>রফিক হোন্ডা | শোরুম ম্যানেজমেন্ট</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#142b45">
+<title>রফিক হোন্ডা | কালেকশন ও শোরুম ম্যানেজমেন্ট</title>
 <style>
-:root{--navy:#142b45;--blue:#245b91;--bg:#f3f6fa;--line:#dce4ed;--muted:#64748b}
+:root{--navy:#142b45;--blue:#245b91;--bg:#f3f6fa;--line:#dce4ed;--muted:#64748b;--green:#16835d;--red:#b42318}
 *{box-sizing:border-box}body{margin:0;background:var(--bg);font-family:system-ui,"Noto Sans Bengali",sans-serif;color:#172334}
-header{background:var(--navy);color:white;padding:22px max(16px,calc((100% - 1080px)/2));}
-header h1{margin:0;font-size:25px}header p{margin:5px 0 0;color:#d5dfeb;font-size:13px}
-main{max-width:1080px;margin:20px auto;padding:0 14px}.notice{background:#fff7df;border:1px solid #f1d58b;padding:12px;border-radius:12px;font-size:13px;line-height:1.6}
-nav{display:flex;gap:8px;overflow:auto;margin:16px 0}button{border:0;border-radius:10px;padding:11px 14px;background:#e5edf6;color:#19324e;font-weight:650;cursor:pointer;white-space:nowrap}
-button.active,.primary{background:var(--blue);color:white}.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
-.card{background:white;border:1px solid var(--line);border-radius:14px;padding:16px;margin-bottom:12px}.metric small{color:var(--muted)}.metric strong{display:block;font-size:25px;margin-top:5px}
-h2{font-size:19px;margin:5px 0 14px}label{display:block;font-size:13px;font-weight:650;margin:10px 0 5px}
-input,select{width:100%;padding:12px;border:1px solid #cbd5e1;border-radius:9px;background:white;font:inherit}
-.row{display:grid;grid-template-columns:1fr 1fr;gap:10px}.result{background:#eef5fc;padding:12px;border-radius:10px;margin-top:12px;line-height:1.8}
-table{width:100%;border-collapse:collapse;font-size:13px}th,td{text-align:left;padding:10px;border-bottom:1px solid var(--line)}.tablewrap{overflow:auto}
-.muted{color:var(--muted);font-size:12px}.hidden{display:none}.danger{background:#fee2e2;color:#991b1b}
-@media(max-width:600px){.grid{grid-template-columns:1fr 1fr}.row{grid-template-columns:1fr}main{margin-top:12px}.card{padding:13px}}
-</style></head>
+header{background:var(--navy);color:white;padding:20px max(16px,calc((100% - 1120px)/2))}
+header h1{margin:0;font-size:24px}header p{margin:5px 0 0;color:#d5dfeb;font-size:13px}
+main{max-width:1120px;margin:18px auto;padding:0 14px}
+.notice{background:#fff7df;border:1px solid #f1d58b;padding:12px;border-radius:12px;font-size:13px;line-height:1.6;margin-bottom:14px}
+nav{display:flex;gap:8px;overflow:auto;margin:14px 0;padding-bottom:3px}
+button{border:0;border-radius:9px;padding:11px 14px;background:#e5edf6;color:#19324e;font-weight:650;cursor:pointer;white-space:nowrap;font:inherit}
+button.active,.primary{background:var(--blue);color:white}.success{background:#e4f5ed;color:#126447}.danger{background:#fee2e2;color:#991b1b}
+.grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
+.card{background:white;border:1px solid var(--line);border-radius:14px;padding:15px;margin-bottom:12px}
+.metric small{color:var(--muted)}.metric strong{display:block;font-size:23px;margin-top:5px;overflow-wrap:anywhere}
+h2{font-size:18px;margin:4px 0 13px}h3{font-size:15px;margin:0 0 8px}
+label{display:block;font-size:13px;font-weight:650;margin:10px 0 5px}
+input,select,textarea{width:100%;padding:11px;border:1px solid #cbd5e1;border-radius:9px;background:white;font:inherit;min-width:0}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:10px}.three{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.result{background:#eef5fc;padding:11px;border-radius:10px;margin-top:11px;line-height:1.8}
+.tablewrap{overflow:auto}table{width:100%;border-collapse:collapse;font-size:13px;min-width:650px}th,td{text-align:left;padding:9px;border-bottom:1px solid var(--line);vertical-align:top}th{background:#f7f9fc}
+.muted{color:var(--muted);font-size:12px}.hidden{display:none!important}.actions{display:flex;gap:6px;flex-wrap:wrap}.actions button{padding:7px 9px;font-size:12px}
+.pill{display:inline-block;padding:3px 8px;border-radius:20px;background:#edf2f7;font-size:11px}.due{color:var(--red);font-weight:700}.paid{color:var(--green);font-weight:700}
+hr{border:0;border-top:1px solid var(--line);margin:14px 0}.empty{text-align:center;color:var(--muted);padding:18px}
+@media(max-width:760px){.grid{grid-template-columns:repeat(2,minmax(0,1fr))}.three{grid-template-columns:1fr 1fr}}
+@media(max-width:480px){header h1{font-size:21px}.row,.three{grid-template-columns:1fr}.card{padding:12px}.metric strong{font-size:20px}}
+</style>
+</head>
 <body>
-<header><h1>রফিক হোন্ডা</h1><p>ভালুকজান বাজার, ফুলবাড়িয়া, ময়মনসিংহ · শোরুম ম্যানেজমেন্ট</p></header>
+<header><h1>রফিক হোন্ডা</h1><p>Principal Rafiq Motors & Electronics · ভালুকজান বাজার, ফুলবাড়িয়া, ময়মনসিংহ</p></header>
 <main>
-<div class="notice"><b>প্রাথমিক নমুনা:</b> এই ফাইলটি শুধু ইন্টারফেস ও কিস্তির হিসাবের ডেমো। তথ্য এই ব্রাউজারেই অস্থায়ীভাবে থাকে; এটি নিরাপদ অনলাইন ডেটাবেস, লগইন বা SMS নয়। প্রকৃত কাস্টমারের তথ্য দেওয়ার আগে ডেটাবেস ও অ্যাক্সেস নিয়ন্ত্রণ যুক্ত করতে হবে।</div>
+<div class="notice"><b>গুরুত্বপূর্ণ:</b> এটি Firebase সংযোগের জন্য প্রস্তুত একটি প্রাথমিক সংস্করণ। আপাতত তথ্য শুধু এই ব্রাউজারের Local Storage-এ থাকে। অন্য ফোনে Sync হয় না, লগইন/অনুমতি নেই। বাস্তব কাস্টমারের তথ্য ব্যবহারের আগে Firebase Authentication, Firestore Security Rules ও ব্যাকআপ যুক্ত করতে হবে।</div>
 <nav id="nav">
-<button class="active" data-page="home">ড্যাশবোর্ড</button><button data-page="sale">নতুন বিক্রি</button><button data-page="customers">কাস্টমার তালিকা</button><button data-page="stock">বাইক স্টক</button><button data-page="reports">রিপোর্ট</button>
+<button class="active" data-page="home">ড্যাশবোর্ড</button><button data-page="sale">নতুন বিক্রি</button><button data-page="customers">কাস্টমার</button><button data-page="collection">টাকা কালেকশন</button><button data-page="stock">বাইক স্টক</button><button data-page="reports">রিপোর্ট</button><button data-page="settings">সেটিংস</button>
 </nav>
+
 <section id="home" class="page">
 <div class="grid">
-<div class="card metric"><small>ডেমো বিক্রির সংখ্যা</small><strong id="count">০</strong></div>
-<div class="card metric"><small>মোট বিক্রয়মূল্য</small><strong id="total">৳০</strong></div>
-<div class="card metric"><small>কিস্তিতে বিক্রি</small><strong id="installments">০</strong></div>
-<div class="card metric"><small>ডেমো বকেয়া</small><strong id="due">৳০</strong></div>
+<div class="card metric"><small>মোট বিক্রি</small><strong id="mSales">৳০</strong></div>
+<div class="card metric"><small>বিক্রির সংখ্যা</small><strong id="mCount">০</strong></div>
+<div class="card metric"><small>মোট আদায়</small><strong id="mPaid">৳০</strong></div>
+<div class="card metric"><small>বর্তমান বকেয়া</small><strong id="mDue" class="due">৳০</strong></div>
 </div>
-<div class="card"><h2>শুরু করার নির্দেশনা</h2><p>১. নতুন বিক্রির ফর্মে কাস্টমার ও বাইকের তথ্য দিন।<br>২. নগদ অথবা ডাউন পেমেন্টসহ কিস্তি নির্বাচন করুন।<br>৩. কিস্তির মেয়াদ নিজের মতো মাসে লিখুন।<br>৪. বাস্তব ব্যবহারের আগে ক্লাউড ডেটাবেস ও নিরাপদ লগইন স্থাপন করুন।</p></div>
+<div class="card"><h2>সাম্প্রতিক কালেকশন</h2><div class="tablewrap"><table><thead><tr><th>তারিখ</th><th>কাস্টমার</th><th>টাকা</th><th>গ্রহণ করেছেন</th></tr></thead><tbody id="recentRows"></tbody></table></div><p id="recentEmpty" class="empty">এখনো কোনো কালেকশন নেই।</p></div>
+<div class="card"><h2>ব্যবহারের নিয়ম</h2><p class="muted">১. নতুন বিক্রিতে কাস্টমার ও বাইকের তথ্য দিন। ২. কিস্তির বিক্রি হলে ডাউন পেমেন্ট ও মেয়াদ লিখুন। ৩. টাকা কালেকশন পেজে বিক্রি নির্বাচন করে আদায়ের টাকা যোগ করুন। ৪. রিপোর্ট থেকে হিসাব দেখুন বা CSV ডাউনলোড করুন।</p></div>
 </section>
-<section id="sale" class="page hidden">
-<div class="card"><h2>নতুন বাইক বিক্রি</h2>
+
+<section id="sale" class="page hidden"><div class="card"><h2>নতুন বাইক বিক্রি</h2>
 <form id="saleForm">
-<label>কাস্টমারের নাম</label><input id="customer" required>
-<label>মোবাইল নম্বর</label><input id="phone" inputmode="tel" required placeholder="01XXXXXXXXX">
-<label>Honda মডেল</label><input id="model" required placeholder="যেমন: Honda Shine 100">
+<div class="row"><div><label>কাস্টমারের নাম *</label><input id="customer" required></div><div><label>মোবাইল নম্বর *</label><input id="phone" inputmode="tel" required placeholder="01XXXXXXXXX"></div></div>
+<div class="row"><div><label>ঠিকানা</label><input id="address"></div><div><label>Honda মডেল *</label><input id="model" required placeholder="যেমন: Honda Shine 100"></div></div>
 <div class="row"><div><label>ইঞ্জিন নম্বর</label><input id="engine"></div><div><label>চেসিস নম্বর</label><input id="chassis"></div></div>
-<label>বিক্রির ধরন</label><select id="kind"><option value="cash">নগদ বিক্রি</option><option value="installment">ডাউন পেমেন্ট দিয়ে কিস্তি</option></select>
-<label>বিক্রয়মূল্য (টাকা)</label><input id="price" type="number" min="1" required value="120000">
-<div id="instFields"><label>ডাউন পেমেন্ট (টাকা)</label><input id="down" type="number" min="0" value="30000">
-<div class="row"><div><label>কিস্তির মেয়াদ (মাস)</label><input id="months" type="number" min="1" value="12"></div><div><label>প্রথম কিস্তির তারিখ</label><input id="firstDate" type="date"></div></div>
-<label>মাসিক কিস্তি (টাকা) — ফাঁকা রাখলে বাকি টাকা সমান ভাগ হবে</label><input id="monthly" type="number" min="1" placeholder="স্বয়ংক্রিয় হিসাব">
-</div>
-<div class="result" id="calc">বাকি: ৳৯০,০০০ · আনুমানিক মাসিক: ৳৭,৫০০</div>
-<button class="primary" type="submit" style="margin-top:14px">ডেমো রেকর্ড যোগ করুন</button>
+<div class="row"><div><label>বিক্রির ধরন</label><select id="kind"><option value="cash">নগদ বিক্রি</option><option value="installment">কিস্তিতে বিক্রি</option></select></div><div><label>বিক্রির তারিখ</label><input id="saleDate" type="date" required></div></div>
+<div class="row"><div><label>বিক্রয়মূল্য (টাকা) *</label><input id="price" type="number" min="1" required value="120000"></div><div id="downWrap"><label>ডাউন পেমেন্ট (টাকা)</label><input id="down" type="number" min="0" value="30000"></div></div>
+<div class="row" id="installmentFields"><div><label>কিস্তির মেয়াদ (মাস)</label><input id="months" type="number" min="1" value="12"></div><div><label>প্রথম কিস্তির তারিখ</label><input id="firstDate" type="date"></div></div>
+<div class="row"><div><label>দায়িত্বপ্রাপ্ত কর্মচারী</label><select id="salesperson" class="staffSelect"></select></div><div><label>মাসিক কিস্তি (ঐচ্ছিক)</label><input id="monthly" type="number" min="1" placeholder="স্বয়ংক্রিয় হিসাব"></div></div>
+<div class="result" id="calc"></div><button class="primary" type="submit" style="margin-top:13px">বিক্রি সংরক্ষণ করুন</button>
 </form></div></section>
-<section id="customers" class="page hidden"><div class="card"><h2>কাস্টমার ও বিক্রির তালিকা</h2><div class="tablewrap"><table><thead><tr><th>নাম</th><th>মোবাইল</th><th>বাইক</th><th>ধরন</th><th>বকেয়া</th></tr></thead><tbody id="rows"></tbody></table></div><p class="muted" id="empty">এখনো কোনো ডেমো রেকর্ড নেই।</p></div></section>
-<section id="stock" class="page hidden"><div class="card"><h2>Honda বাইক স্টক</h2><p>এই সংস্করণে স্টক মডিউলটি কাঠামো হিসেবে আছে। পরবর্তী সংস্করণে মডেল, রং, ক্রয়মূল্য, বিক্রয়মূল্য, ইঞ্জিন ও চেসিস নম্বরসহ ইনভেন্টরি যুক্ত হবে।</p></div></section>
-<section id="reports" class="page hidden"><div class="card"><h2>রিপোর্ট</h2><p>ডেমো বিক্রির সারাংশ নিচে দেখানো হবে। পূর্ণ দৈনিক/মাসিক রিপোর্ট, আদায় খাতা, লাভ-ক্ষতি ও প্রিন্টযোগ্য ইনভয়েস ডেটাবেস সংযুক্তির পর যুক্ত হবে।</p><p id="summary"></p></div></section>
+
+<section id="customers" class="page hidden"><div class="card"><h2>কাস্টমার ও বিক্রির তালিকা</h2><input id="customerSearch" placeholder="নাম, মোবাইল বা বাইক দিয়ে খুঁজুন"><div class="tablewrap" style="margin-top:12px"><table><thead><tr><th>কাস্টমার</th><th>বাইক</th><th>বিক্রয়মূল্য</th><th>আদায়</th><th>বকেয়া</th><th>অ্যাকশন</th></tr></thead><tbody id="customerRows"></tbody></table></div><p id="customerEmpty" class="empty">কোনো বিক্রির তথ্য নেই।</p></div></section>
+
+<section id="collection" class="page hidden"><div class="card"><h2>কিস্তি / টাকা কালেকশন</h2><form id="paymentForm">
+<label>কাস্টমার / বিক্রি নির্বাচন *</label><select id="paymentSale" required><option value="">বিক্রি নির্বাচন করুন</option></select>
+<div class="row"><div><label>আদায়ের টাকা *</label><input id="payAmount" type="number" min="1" required></div><div><label>আদায়ের তারিখ *</label><input id="payDate" type="date" required></div></div>
+<div class="row"><div><label>টাকা গ্রহণ করেছেন</label><select id="collector" class="staffSelect"></select></div><div><label>পেমেন্ট মাধ্যম</label><select id="payMethod"><option>নগদ</option><option>বিকাশ</option><option>নগদ (মোবাইল)</option><option>ব্যাংক</option><option>অন্যান্য</option></select></div></div>
+<label>নোট / রসিদ নম্বর</label><input id="payNote" placeholder="ঐচ্ছিক">
+<div class="result" id="paymentInfo">বিক্রি নির্বাচন করলে বকেয়া দেখা যাবে।</div><button class="primary" type="submit" style="margin-top:12px">কালেকশন সংরক্ষণ করুন</button>
+</form></div>
+<div class="card"><h2>কালেকশন ইতিহাস</h2><div class="tablewrap"><table><thead><tr><th>তারিখ</th><th>কাস্টমার</th><th>টাকা</th><th>গ্রহণকারী</th><th>মাধ্যম</th><th>নোট</th></tr></thead><tbody id="paymentRows"></tbody></table></div><p id="paymentEmpty" class="empty">এখনো কোনো কালেকশন নেই।</p></div></section>
+
+<section id="stock" class="page hidden"><div class="card"><h2>বাইক স্টক</h2><form id="stockForm"><div class="row"><div><label>বাইকের মডেল *</label><input id="stockModel" required></div><div><label>রং</label><input id="stockColor"></div></div><div class="row"><div><label>ইঞ্জিন নম্বর</label><input id="stockEngine"></div><div><label>চেসিস নম্বর</label><input id="stockChassis"></div></div><div class="row"><div><label>পরিমাণ</label><input id="stockQty" type="number" min="1" value="1"></div><div><label>ক্রয়মূল্য (প্রতি বাইক)</label><input id="stockCost" type="number" min="0"></div></div><button class="primary" type="submit" style="margin-top:12px">স্টক যোগ করুন</button></form><hr><div class="tablewrap"><table><thead><tr><th>মডেল</th><th>রং</th><th>ইঞ্জিন</th><th>চেসিস</th><th>পরিমাণ</th><th>অ্যাকশন</th></tr></thead><tbody id="stockRows"></tbody></table></div><p id="stockEmpty" class="empty">স্টকের তথ্য যোগ করা হয়নি।</p></div></section>
+
+<section id="reports" class="page hidden"><div class="card"><h2>বিক্রি ও আদায়ের রিপোর্ট</h2><div class="row"><div><label>শুরুর তারিখ</label><input id="reportFrom" type="date"></div><div><label>শেষ তারিখ</label><input id="reportTo" type="date"></div></div><button class="primary" id="runReport" style="margin-top:12px">রিপোর্ট দেখুন</button><div id="reportResult" class="result"></div><button id="exportCsv" class="success" style="margin-top:10px">বিক্রির CSV ডাউনলোড</button></div></section>
+
+<section id="settings" class="page hidden"><div class="card"><h2>কর্মচারীর নাম</h2><p class="muted">এখানে নাম যোগ করলে বিক্রি ও কালেকশনের ফর্মে পাওয়া যাবে। এটি এখন শুধু এই ব্রাউজারে সংরক্ষিত।</p><form id="staffForm"><label>কর্মচারীর নাম</label><input id="staffName" required placeholder="নাম লিখুন"><button class="primary" style="margin-top:10px">নাম যোগ করুন</button></form><div id="staffList" style="margin-top:12px"></div><hr><h3>ডেটা ব্যাকআপ</h3><p class="muted">এই ডিভাইসের তথ্য JSON ফাইলে ডাউনলোড করুন। এটি Firebase Sync-এর বিকল্প নয়।</p><div class="actions"><button id="backup" class="success">ব্যাকআপ ডাউনলোড</button><button id="restoreBtn">ব্যাকআপ ইমপোর্ট</button><input id="restoreFile" type="file" accept="application/json" class="hidden"></div><hr><button id="clearData" class="danger">সব ডেমো তথ্য মুছুন</button></div></section>
 </main>
 <script>
 const $=id=>document.getElementById(id), money=n=>'৳'+Number(n||0).toLocaleString('en-BD');
-let sales=[];
-document.querySelectorAll('#nav button').forEach(b=>b.onclick=()=>{document.querySelectorAll('#nav button').forEach(x=>x.classList.remove('active'));b.classList.add('active');document.querySelectorAll('.page').forEach(p=>p.classList.add('hidden'));$(b.dataset.page).classList.remove('hidden')});
-function updateCalc(){let price=+$('price').value||0,down=+$('down').value||0,months=Math.max(1,+$('months').value||1),due=Math.max(0,price-down),monthly=+$('monthly').value||Math.ceil(due/months);$('instFields').style.display=$('kind').value==='installment'?'block':'none';$('calc').textContent=$('kind').value==='cash'?'নগদ বিক্রি: '+money(price):'বাকি: '+money(due)+' · আনুমানিক মাসিক: '+money(monthly)+' · শেষ কিস্তিতে সমন্বয় হবে';}
-['kind','price','down','months','monthly'].forEach(id=>$(id).addEventListener('input',updateCalc));updateCalc();
-$('saleForm').onsubmit=e=>{e.preventDefault();let price=+$('price').value,kind=$('kind').value,down=kind==='cash'?price:+$('down').value,months=kind==='cash'?0:+$('months').value,due=price-down,monthly=kind==='cash'?0:(+$('monthly').value||Math.ceil(due/months));if(kind==='installment'&&(down>=price||months<1||down<0)){alert('ডাউন পেমেন্ট বিক্রয়মূল্যের চেয়ে কম এবং মেয়াদ ১ মাস বা বেশি হতে হবে।');return}sales.push({name:$('customer').value,phone:$('phone').value,model:$('model').value,kind,price,down,due,months,monthly,engine:$('engine').value,chassis:$('chassis').value});render();e.target.reset();$('price').value=120000;$('down').value=30000;$('months').value=12;updateCalc();alert('ডেমো রেকর্ড যোগ হয়েছে। এটি স্থায়ী বা অনলাইন সংরক্ষণ নয়।')};
-function render(){$('count').textContent=sales.length;$('total').textContent=money(sales.reduce((a,x)=>a+x.price,0));$('installments').textContent=sales.filter(x=>x.kind==='installment').length;$('due').textContent=money(sales.reduce((a,x)=>a+x.due,0));$('rows').innerHTML=sales.map(x=>`<tr><td>${esc(x.name)}</td><td>${esc(x.phone)}</td><td>${esc(x.model)}</td><td>${x.kind==='cash'?'নগদ':'কিস্তি'}</td><td>${money(x.due)}</td></tr>`).join('');$('empty').style.display=sales.length?'none':'block';$('summary').textContent='মোট রেকর্ড: '+sales.length+' · মোট বিক্রি: '+money(sales.reduce((a,x)=>a+x.price,0))+' · মোট বকেয়া: '+money(sales.reduce((a,x)=>a+x.due,0))}
-function esc(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
-</script></body></html>
+const today=()=>new Date().toISOString().slice(0,10);
+let db=load();
+function load(){try{return JSON.parse(localStorage.getItem('rafiqHondaDB'))||{sales:[],payments:[],stock:[],staff:['Manager','Sales Staff 1','Sales Staff 2']}}catch(e){return{sales:[],payments:[],stock:[],staff:['Manager']}}}
+function save(){localStorage.setItem('rafiqHondaDB',JSON.stringify(db))}
+function uid(){return Date.now().toString(36)+Math.random().toString(36).slice(2,7)}
+function paidFor(id){return db.payments.filter(p=>p.saleId===id).reduce((a,p)=>a+p.amount,0)}
+function dueFor(s){return Math.max(0,s.price-paidFor(s.id))}
+function esc(v){return String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+function page(id){document.querySelectorAll('.page').forEach(p=>p.classList.add('hidden'));$(id).classList.remove('hidden');document.querySelectorAll('#nav button').forEach(b=>b.classList.toggle('active',b.dataset.page===id));render()}
+document.querySelectorAll('#nav button').forEach(b=>b.onclick=()=>page(b.dataset.page));
+function refreshStaff(){document.querySelectorAll('.staffSelect').forEach(sel=>{let old=sel.value;sel.innerHTML=db.staff.map(n=>`<option>${esc(n)}</option>`).join('');if(db.staff.includes(old))sel.value=old});$('staffList').innerHTML=db.staff.map((n,i)=>`<div class="actions" style="margin:6px 0"><span class="pill">${esc(n)}</span>${i>0?`<button class="danger" onclick="removeStaff(${i})">মুছুন</button>`:''}</div>`).join('')}
+function render(){
+ const total=db.sales.reduce((a,s)=>a+s.price,0),paid=db.payments.reduce((a,p)=>a+p.amount,0),due=db.sales.reduce((a,s)=>a+dueFor(s),0);
+ $('mSales').textContent=money(total);$('mCount').textContent=db.sales.length;$('mPaid').textContent=money(paid);$('mDue').textContent=money(due);
+ $('customerRows').innerHTML=db.sales.filter(s=>{let q=$('customerSearch').value.toLowerCase();return (s.name+' '+s.phone+' '+s.model).toLowerCase().includes(q)}).map(s=>`<tr><td><b>${esc(s.name)}</b><br>${esc(s.phone)}<br><span class="muted">${esc(s.address||'')}</span></td><td>${esc(s.model)}<br><span class="muted">${s.kind==='cash'?'নগদ':'কিস্তি'}</span></td><td>${money(s.price)}</td><td class="paid">${money(paidFor(s.id))}</td><td class="due">${money(dueFor(s))}</td><td><div class="actions"><button onclick="selectForPayment('${s.id}')">আদায়</button><button class="danger" onclick="deleteSale('${s.id}')">মুছুন</button></div></td></tr>`).join('');
+ $('customerEmpty').style.display=db.sales.length?'none':'block';
+ $('paymentSale').innerHTML='<option value="">বিক্রি নির্বাচন করুন</option>'+db.sales.filter(s=>dueFor(s)>0).map(s=>`<option value="${s.id}">${esc(s.name)} · ${esc(s.phone)} · বকেয়া ${money(dueFor(s))}</option>`).join('');
+ $('paymentRows').innerHTML=db.payments.slice().sort((a,b)=>b.date.localeCompare(a.date)).map(p=>{let s=db.sales.find(x=>x.id===p.saleId);return `<tr><td>${esc(p.date)}</td><td>${esc(s?.name||'মুছে ফেলা বিক্রি')}</td><td class="paid">${money(p.amount)}</td><td>${esc(p.collector)}</td><td>${esc(p.method)}</td><td>${esc(p.note)}</td></tr>`}).join('');
+ $('paymentEmpty').style.display=db.payments.length?'none':'block';
+ $('recentRows').innerHTML=db.payments.slice().sort((a,b)=>b.date.localeCompare(a.date)).slice(0,6).map(p=>{let s=db.sales.find(x=>x.id===p.saleId);return `<tr><td>${esc(p.date)}</td><td>${esc(s?.name||'—')}</td><td>${money(p.amount)}</td><td>${esc(p.collector)}</td></tr>`}).join('');
+ $('recentEmpty').style.display=db.payments.length?'none':'block';
+ $('stockRows').innerHTML=db.stock.map(x=>`<tr><td>${esc(x.model)}</td><td>${esc(x.color)}</td><td>${esc(x.engine)}</td><td>${esc(x.chassis)}</td><td>${x.qty}</td><td><button class="danger" onclick="deleteStock('${x.id}')">মুছুন</button></td></tr>`).join('');$('stockEmpty').style.display=db.stock.length?'none':'block';
+ refreshStaff();updateCalc();updatePaymentInfo();
+}
+function updateCalc(){let price=+$('price').value||0,down=$('kind').value==='cash'?price:(+$('down').value||0),months=Math.max(1,+$('months').value||1),balance=Math.max(0,price-down),monthly=+$('monthly').value||Math.ceil(balance/months);$('installmentFields').classList.toggle('hidden',$('kind').value==='cash');$('downWrap').classList.toggle('hidden',$('kind').value==='cash');$('calc').textContent=$('kind').value==='cash'?'নগদ বিক্রি: '+money(price):'ডাউন পেমেন্টের পর বাকি: '+money(balance)+' · আনুমানিক মাসিক কিস্তি: '+money(monthly)}
+['kind','price','down','months','monthly'].forEach(id=>$(id).addEventListener('input',updateCalc));
+$('saleDate').value=today();$('payDate').value=today();$('firstDate').value=today();
+$('saleForm').onsubmit=e=>{e.preventDefault();let price=+$('price').value,kind=$('kind').value,down=kind==='cash'?price:+$('down').value,months=kind==='cash'?0:+$('months').value;if(price<=0||(kind==='installment'&&(down<0||down>=price||months<1))){alert('বিক্রয়মূল্য, ডাউন পেমেন্ট ও কিস্তির মেয়াদ যাচাই করুন।');return}
+let s={id:uid(),name:$('customer').value.trim(),phone:$('phone').value.trim(),address:$('address').value.trim(),model:$('model').value.trim(),engine:$('engine').value.trim(),chassis:$('chassis').value.trim(),kind,price,down,months,monthly:kind==='cash'?0:(+$('monthly').value||Math.ceil((price-down)/months)),saleDate:$('saleDate').value,firstDate:$('firstDate').value,salesperson:$('salesperson').value};
+db.sales.push(s);if(down>0)db.payments.push({id:uid(),saleId:s.id,amount:down,date:s.saleDate,collector:s.salesperson,method:'নগদ',note:'ডাউন পেমেন্ট'});save();e.target.reset();$('price').value=120000;$('down').value=30000;$('months').value=12;$('saleDate').value=today();$('firstDate').value=today();render();alert('বিক্রির তথ্য সংরক্ষণ হয়েছে।')}
+function updatePaymentInfo(){let s=db.sales.find(x=>x.id===$('paymentSale').value);$('paymentInfo').textContent=s?'বিক্রয়মূল্য: '+money(s.price)+' · মোট আদায়: '+money(paidFor(s.id))+' · বর্তমান বকেয়া: '+money(dueFor(s)):'বিক্রি নির্বাচন করলে বকেয়া দেখা যাবে।';$('payAmount').max=s?dueFor(s):''}
+$('paymentSale').onchange=updatePaymentInfo;
+$('paymentForm').onsubmit=e=>{e.preventDefault();let s=db.sales.find(x=>x.id===$('paymentSale').value),amount=+$('payAmount').value;if(!s||amount<=0||amount>dueFor(s)){alert('বিক্রি নির্বাচন করুন এবং বকেয়ার বেশি টাকা দেবেন না।');return}db.payments.push({id:uid(),saleId:s.id,amount,date:$('payDate').value,collector:$('collector').value,method:$('payMethod').value,note:$('payNote').value.trim()});save();e.target.reset();$('payDate').value=today();render();alert('কালেকশন সংরক্ষণ হয়েছে।')}
+function selectForPayment(id){page('collection');$('paymentSale').value=id;updatePaymentInfo();$('payAmount').focus()}
+function deleteSale(id){if(!confirm('এই বিক্রি এবং এর সংশ্লিষ্ট পেমেন্ট মুছবেন?'))return;db.sales=db.sales.filter(s=>s.id!==id);db.payments=db.payments.filter(p=>p.saleId!==id);save();render()}
+$('customerSearch').oninput=render;
+$('stockForm').onsubmit=e=>{e.preventDefault();db.stock.push({id:uid(),model:$('stockModel').value,color:$('stockColor').value,engine:$('stockEngine').value,chassis:$('stockChassis').value,qty:Math.max(1,+$('stockQty').value||1),cost:+$('stockCost').value||0});save();e.target.reset();$('stockQty').value=1;render();alert('স্টক যোগ হয়েছে।')}
+function deleteStock(id){if(confirm('স্টকের এই তথ্য মুছবেন?')){db.stock=db.stock.filter(x=>x.id!==id);save();render()}}
+$('staffForm').onsubmit=e=>{e.preventDefault();let n=$('staffName').value.trim();if(n&&!db.staff.includes(n)){db.staff.push(n);save();$('staffName').value='';render()}}
+function removeStaff(i){if(confirm('কর্মচারীর নাম মুছবেন?')){db.staff.splice(i,1);if(!db.staff.length)db.staff=['Manager'];save();render()}}
+$('runReport').onclick=()=>{let a=$('reportFrom').value,b=$('reportTo').value,sales=db.sales.filter(s=>(!a||s.saleDate>=a)&&(!b||s.saleDate<=b)),ids=new Set(sales.map(s=>s.id)),payments=db.payments.filter(p=>ids.has(p.saleId)&&(!a||p.date>=a)&&(!b||p.date<=b));$('reportResult').innerHTML='বিক্রির সংখ্যা: <b>'+sales.length+'</b><br>বিক্রয়মূল্য: <b>'+money(sales.reduce((n,s)=>n+s.price,0))+'</b><br>নির্বাচিত সময়ে আদায়: <b>'+money(payments.reduce((n,p)=>n+p.amount,0))+'</b><br>এই বিক্রিগুলোর বর্তমান বকেয়া: <b>'+money(sales.reduce((n,s)=>n+dueFor(s),0))+'</b>'}
+$('exportCsv').onclick=()=>{let lines=[['নাম','মোবাইল','ঠিকানা','মডেল','তারিখ','বিক্রয়মূল্য','আদায়','বকেয়া','দায়িত্বপ্রাপ্ত'],...db.sales.map(s=>[s.name,s.phone,s.address,s.model,s.saleDate,s.price,paidFor(s.id),dueFor(s),s.salesperson])];let csv='\uFEFF'+lines.map(r=>r.map(v=>'"'+String(v??'').replace(/"/g,'""')+'"').join(',')).join('\n');download('rafiq-honda-sales.csv',csv,'text/csv;charset=utf-8')}
+function download(name,data,type){let blob=new Blob([data],{type}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download=name;a.click();URL.revokeObjectURL(url)}
+$('backup').onclick=()=>download('rafiq-honda-backup.json',JSON.stringify(db,null,2),'application/json');
+$('restoreBtn').onclick=()=>$('restoreFile').click();
+$('restoreFile').onchange=async e=>{let f=e.target.files[0];if(!f)return;try{let d=JSON.parse(await f.text());if(!Array.isArray(d.sales)||!Array.isArray(d.payments)||!Array.isArray(d.stock)||!Array.isArray(d.staff))throw Error();if(confirm('বর্তমান তথ্যের বদলে ব্যাকআপের তথ্য বসবে। চালাবেন?')){db=d;save();render();alert('ব্যাকআপ ইমপোর্ট হয়েছে।')}}catch(err){alert('সঠিক RAFIQ HONDA JSON ব্যাকআপ ফাইল নির্বাচন করুন।')}e.target.value=''}
+$('clearData').onclick=()=>{if(confirm('সতর্কতা: এই ব্রাউজারের সব বিক্রি, পেমেন্ট, স্টক ও কর্মচারীর তথ্য মুছে যাবে। নিশ্চিত?')){db={sales:[],payments:[],stock:[],staff:['Manager']};save();render()}}
+render();
+</script>
+</body></html>
