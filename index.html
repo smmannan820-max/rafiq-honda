@@ -88,7 +88,7 @@ hr{border:0;border-top:1px solid var(--line);margin:14px 0}.empty{text-align:cen
 </div>
 <button id="exportCsv" class="success" style="margin-top:10px">বিক্রির CSV ডাউনলোড</button></div></section>
 
-<section id="settings" class="page hidden"><div class="card"><h2>কর্মচারীর নাম</h2><p class="muted">এখানে নাম যোগ করলে বিক্রি ও কালেকশনের ফর্মে পাওয়া যাবে। এটি এখন শুধু এই ব্রাউজারে সংরক্ষিত।</p><form id="staffForm"><label>কর্মচারীর নাম</label><input id="staffName" required placeholder="নাম লিখুন"><button class="primary" style="margin-top:10px">নাম যোগ করুন</button></form><div id="staffList" style="margin-top:12px"></div><hr><h3>ডেটা ব্যাকআপ</h3><p class="muted">এই ডিভাইসের তথ্য JSON ফাইলে ডাউনলোড করুন। এটি Firebase Sync-এর বিকল্প নয়।</p><div class="actions"><button id="backup" class="success">ব্যাকআপ ডাউনলোড</button><button id="restoreBtn">ব্যাকআপ ইমপোর্ট</button><input id="restoreFile" type="file" accept="application/json" class="hidden"></div><hr><button id="clearData" class="danger">সব ডেমো তথ্য মুছুন</button></div></section>
+<section id="settings" class="page hidden"><div class="card"><h2>কর্মচারীর নাম</h2><p class="muted">এখানে নাম যোগ করলে বিক্রি ও কালেকশনের ফর্মে পাওয়া যাবে। এটি এখন শুধু এই ব্রাউজারে সংরক্ষিত।</p><form id="staffForm"><label>কর্মচারীর নাম</label><input id="staffName" required placeholder="নাম লিখুন"><button class="primary" style="margin-top:10px">নাম যোগ করুন</button></form><div id="staffList" style="margin-top:12px"></div><hr><h3>ডেটা ব্যাকআপ</h3><p class="muted">এই ডিভাইসের তথ্য JSON ফাইলে ডাউনলোড করুন। এটি Firebase Sync-এর বিকল্প নয়।</p><div class="actions"><button id="backup" class="success">ব্যাকআপ ডাউনলোড</button><button id="restoreBtn">ব্যাকআপ ইমপোর্ট</button><input id="restoreFile" type="file" accept="application/json" class="hidden"></div><hr><h3>SMS পরীক্ষা (শুধু Manager)</h3><p class="muted">প্রথমে নিজের নম্বরে একটি পরীক্ষামূলক SMS পাঠিয়ে সংযোগ যাচাই করুন।</p><label>মোবাইল নম্বর</label><input id="smsTestPhone" inputmode="tel" placeholder="01XXXXXXXXX"><label>বার্তা</label><textarea id="smsTestMessage" rows="3">RAFIQ HONDA থেকে SMS সংযোগ পরীক্ষা।</textarea><button id="smsTestButton" class="primary" type="button" style="margin-top:10px">পরীক্ষামূলক SMS পাঠান</button><p id="smsTestResult" class="muted" role="status"></p><hr><button id="clearData" class="danger">সব ডেমো তথ্য মুছুন</button></div></section>
 </main>
 <script>
 const $=id=>document.getElementById(id), money=n=>'৳'+Number(n||0).toLocaleString('en-BD');
@@ -159,6 +159,19 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
+window.__sendRafiqSms = async (to, msgText) => {
+  const user = auth.currentUser;
+  if (!user) throw new Error("আগে লগইন করুন");
+  const token = await user.getIdToken();
+  const response = await fetch("https://rafiq-honda-sms.rafiqhondafulbaria.workers.dev", {
+    method: "POST",
+    headers: { "Content-Type": "application/json", "Authorization": "Bearer " + token },
+    body: JSON.stringify({ to, msg: msgText })
+  });
+  const result = await response.json();
+  if (!response.ok || result.status !== "OK") throw new Error(result.message || result.response || "SMS পাঠানো যায়নি");
+  return result;
+};
 const firestore = getFirestore(app);
 const dataRef = doc(firestore, "appData", "main");
 const gate = document.getElementById("authGate");
@@ -276,6 +289,20 @@ onAuthStateChanged(auth, async user => {
     document.getElementById("backup").style.display = currentRole === "manager" ? "" : "none";
     document.getElementById("restoreBtn").style.display = currentRole === "manager" ? "" : "none";
     document.getElementById("exportCsv").style.display = currentRole === "manager" ? "" : "none";
+    document.getElementById("smsTestButton").onclick = async () => {
+      const resultEl = document.getElementById("smsTestResult");
+      const phone = document.getElementById("smsTestPhone").value.trim();
+      const smsText = document.getElementById("smsTestMessage").value.trim();
+      if (currentRole !== "manager") { resultEl.textContent = "শুধু Manager SMS পরীক্ষা করতে পারবেন।"; return; }
+      if (!/^01[3-9]\d{8}$/.test(phone) || !smsText) { resultEl.textContent = "সঠিক ১১ সংখ্যার বাংলাদেশি মোবাইল নম্বর ও বার্তা দিন।"; return; }
+      resultEl.textContent = "SMS পাঠানো হচ্ছে...";
+      try {
+        const result = await window.__sendRafiqSms(phone, smsText);
+        resultEl.textContent = result.response || "SMS পাঠানো হয়েছে।";
+      } catch (error) {
+        resultEl.textContent = "SMS পাঠানো যায়নি: " + error.message;
+      }
+    };
     showMessage("");
   } catch (error) {
     console.error(error);
