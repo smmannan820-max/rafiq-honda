@@ -32,9 +32,14 @@ hr{border:0;border-top:1px solid var(--line);margin:14px 0}.empty{text-align:cen
 </style>
 </head>
 <body>
-<header><h1>রফিক হোন্ডা</h1><p>Principal Rafiq Motors & Electronics · ভালুকজান বাজার, ফুলবাড়িয়া, ময়মনসিংহ</p></header>
-<main>
-<div class="notice"><b>গুরুত্বপূর্ণ:</b> এটি Firebase সংযোগের জন্য প্রস্তুত একটি প্রাথমিক সংস্করণ। আপাতত তথ্য শুধু এই ব্রাউজারের Local Storage-এ থাকে। অন্য ফোনে Sync হয় না, লগইন/অনুমতি নেই। বাস্তব কাস্টমারের তথ্য ব্যবহারের আগে Firebase Authentication, Firestore Security Rules ও ব্যাকআপ যুক্ত করতে হবে।</div>
+<header><h1>রফিক হোন্ডা</h1><p>Principal Rafiq Motors & Electronics · ভালুকজান বাজার, ফুলবাড়িয়া, ময়মনসিংহ</p><button id="logoutButton" style="display:none;float:right;margin-top:-32px">লগআউট</button></header>
+<div id="authGate" style="max-width:440px;margin:28px auto;padding:18px;background:white;border:1px solid #dce4ed;border-radius:14px">
+<h2>ম্যানেজার লগইন</h2><p class="muted">RAFIQ HONDA অনলাইন সিস্টেমে প্রবেশ করতে আপনার Manager ইমেইল ও পাসওয়ার্ড দিন।</p>
+<form id="loginForm"><label>ইমেইল</label><input id="loginEmail" type="email" autocomplete="username" required><label>পাসওয়ার্ড</label><input id="loginPassword" type="password" autocomplete="current-password" required><button class="primary" id="loginButton" type="submit" style="margin-top:14px;width:100%">লগইন করুন</button></form>
+<p id="authMessage" class="muted" role="status" style="margin-top:12px"></p>
+</div>
+<main id="appMain" style="display:none">
+<div class="notice"><b>অনলাইন Sync চালু:</b> Firebase Manager লগইন সক্রিয়। এই অ্যাপের তথ্য Firestore-এ সংরক্ষিত হবে। নিরাপত্তার জন্য লগআউট করে বের হবেন।</div>
 <nav id="nav">
 <button class="active" data-page="home">ড্যাশবোর্ড</button><button data-page="sale">নতুন বিক্রি</button><button data-page="customers">কাস্টমার</button><button data-page="collection">টাকা কালেকশন</button><button data-page="stock">বাইক স্টক</button><button data-page="reports">রিপোর্ট</button><button data-page="settings">সেটিংস</button>
 </nav>
@@ -84,7 +89,7 @@ const $=id=>document.getElementById(id), money=n=>'৳'+Number(n||0).toLocaleStr
 const today=()=>new Date().toISOString().slice(0,10);
 let db=load();
 function load(){try{return JSON.parse(localStorage.getItem('rafiqHondaDB'))||{sales:[],payments:[],stock:[],staff:['Manager','Sales Staff 1','Sales Staff 2']}}catch(e){return{sales:[],payments:[],stock:[],staff:['Manager']}}}
-function save(){localStorage.setItem('rafiqHondaDB',JSON.stringify(db))}
+function save(){localStorage.setItem('rafiqHondaDB',JSON.stringify(db));if(window.__queueRafiqCloudSave)window.__queueRafiqCloudSave(db)}
 function uid(){return Date.now().toString(36)+Math.random().toString(36).slice(2,7)}
 function paidFor(id){return db.payments.filter(p=>p.saleId===id).reduce((a,p)=>a+p.amount,0)}
 function dueFor(s){return Math.max(0,s.price-paidFor(s.id))}
@@ -128,6 +133,116 @@ $('backup').onclick=()=>download('rafiq-honda-backup.json',JSON.stringify(db,nul
 $('restoreBtn').onclick=()=>$('restoreFile').click();
 $('restoreFile').onchange=async e=>{let f=e.target.files[0];if(!f)return;try{let d=JSON.parse(await f.text());if(!Array.isArray(d.sales)||!Array.isArray(d.payments)||!Array.isArray(d.stock)||!Array.isArray(d.staff))throw Error();if(confirm('বর্তমান তথ্যের বদলে ব্যাকআপের তথ্য বসবে। চালাবেন?')){db=d;save();render();alert('ব্যাকআপ ইমপোর্ট হয়েছে।')}}catch(err){alert('সঠিক RAFIQ HONDA JSON ব্যাকআপ ফাইল নির্বাচন করুন।')}e.target.value=''}
 $('clearData').onclick=()=>{if(confirm('সতর্কতা: এই ব্রাউজারের সব বিক্রি, পেমেন্ট, স্টক ও কর্মচারীর তথ্য মুছে যাবে। নিশ্চিত?')){db={sales:[],payments:[],stock:[],staff:['Manager']};save();render()}}
+window.__getRafiqData=()=>db;
+window.__setRafiqData=data=>{if(data&&Array.isArray(data.sales)&&Array.isArray(data.payments)&&Array.isArray(data.stock)&&Array.isArray(data.staff)){db=data;localStorage.setItem('rafiqHondaDB',JSON.stringify(db));render()}};
 render();
+</script>
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/13.4.0/firebase-app.js";
+import { getAuth, onAuthStateChanged, signInWithEmailAndPassword, signOut } from "https://www.gstatic.com/firebasejs/13.4.0/firebase-auth.js";
+import { getFirestore, doc, getDoc, setDoc, onSnapshot, serverTimestamp } from "https://www.gstatic.com/firebasejs/13.4.0/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyCXZpBAn2MagQSrHjcAbH_IzKSMhWhlBdY",
+  authDomain: "rafiq-honda-management.firebaseapp.com",
+  projectId: "rafiq-honda-management",
+  storageBucket: "rafiq-honda-management.firebasestorage.app",
+  messagingSenderId: "620173867278",
+  appId: "1:620173867278:web:8f42edb01fe541b8737f5f"
+};
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const firestore = getFirestore(app);
+const dataRef = doc(firestore, "appData", "main");
+const gate = document.getElementById("authGate");
+const main = document.getElementById("appMain");
+const msg = document.getElementById("authMessage");
+const loginForm = document.getElementById("loginForm");
+const loginButton = document.getElementById("loginButton");
+const logoutButton = document.getElementById("logoutButton");
+let stopSync = null;
+let ready = false;
+let saving = false;
+
+function showMessage(text, isError=false) {
+  msg.textContent = text;
+  msg.style.color = isError ? "#b42318" : "#64748b";
+}
+function showApp() {
+  gate.style.display = "none";
+  main.style.display = "block";
+  logoutButton.style.display = "inline-block";
+}
+function showLogin(text="") {
+  main.style.display = "none";
+  gate.style.display = "block";
+  logoutButton.style.display = "none";
+  showMessage(text);
+}
+loginForm.addEventListener("submit", async event => {
+  event.preventDefault();
+  loginButton.disabled = true;
+  showMessage("লগইন যাচাই করা হচ্ছে...");
+  try {
+    await signInWithEmailAndPassword(auth, document.getElementById("loginEmail").value.trim(), document.getElementById("loginPassword").value);
+  } catch (error) {
+    showMessage("লগইন হয়নি। ইমেইল ও পাসওয়ার্ড যাচাই করুন। (" + error.code + ")", true);
+  } finally {
+    loginButton.disabled = false;
+  }
+});
+logoutButton.addEventListener("click", async () => {
+  if (confirm("লগআউট করবেন?")) await signOut(auth);
+});
+
+onAuthStateChanged(auth, async user => {
+  ready = false;
+  window.__queueRafiqCloudSave = null;
+  if (stopSync) { stopSync(); stopSync = null; }
+  if (!user) { showLogin("আপনার Manager ইমেইল দিয়ে লগইন করুন।"); return; }
+  showLogin("আপনার অ্যাকাউন্টের অনুমতি যাচাই করা হচ্ছে...");
+  try {
+    const profileSnap = await getDoc(doc(firestore, "users", user.uid));
+    if (!profileSnap.exists() || profileSnap.data().active !== true || profileSnap.data().role !== "manager") {
+      await signOut(auth);
+      showLogin("এই অ্যাকাউন্টে Manager অনুমতি নেই।");
+      return;
+    }
+    const cloudSnap = await getDoc(dataRef);
+    if (cloudSnap.exists() && cloudSnap.data().payload) {
+      window.__setRafiqData(cloudSnap.data().payload);
+    } else {
+      await setDoc(dataRef, { payload: window.__getRafiqData(), updatedAt: serverTimestamp() });
+    }
+    ready = true;
+    window.__queueRafiqCloudSave = async data => {
+      if (!ready || saving) return;
+      saving = true;
+      try {
+        await setDoc(dataRef, { payload: data, updatedAt: serverTimestamp() });
+      } catch (error) {
+        alert("অনলাইনে তথ্য সংরক্ষণ হয়নি। ইন্টারনেট ও Firebase Rules পরীক্ষা করুন।");
+        console.error(error);
+      } finally {
+        saving = false;
+      }
+    };
+    stopSync = onSnapshot(dataRef, snapshot => {
+      if (!ready || !snapshot.exists() || !snapshot.data().payload) return;
+      const remote = JSON.stringify(snapshot.data().payload);
+      const local = JSON.stringify(window.__getRafiqData());
+      if (remote !== local) window.__setRafiqData(snapshot.data().payload);
+    }, error => {
+      console.error(error);
+      showMessage("অনলাইন Sync-এ সমস্যা হয়েছে: " + error.message, true);
+    });
+    showApp();
+    showMessage("");
+  } catch (error) {
+    console.error(error);
+    showLogin("Firebase সংযোগে সমস্যা হয়েছে। আবার চেষ্টা করুন। (" + error.code + ")");
+  }
+});
 </script>
 </body></html>
